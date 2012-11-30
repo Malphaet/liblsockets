@@ -99,7 +99,9 @@ char *lpacket_message(lpacket*pck){
  */
 int lpacket_send(lsocket*sck,lpacket*pck){
 	char*message=lpacket_message(pck);
-	if (lsocket_send(sck,message,strlen(message)+1)==(int)strlen(message)+1)
+	int status=lsocket_send(sck,message,strlen(message)+1)==(int)strlen(message)+1;
+	free(message);
+	if (status)
 		return 1;
 	else WARNING("Socket sending error"); 
 		return 0;

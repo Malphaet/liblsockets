@@ -17,10 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with liblsockets. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <signal.h>
+
+int volatile should_quit=0;
+void handler(int sig){
+	if (sig==SIGINT) printf("Yeah\n");
+		printf("[%d] Calmly exiting\n",getpid());
+		should_quit=1;
+}
 
 void child_process(){
 	char name[101];
-	lsocket*chld,*nserv=malloc(sizeof(lsocket)),*serv=make_lsocket("tmp/serv");
+	lsocket*chld,*nserv,*serv=make_lsocket("tmp/serv");
 	lpacket*pck;
 	
 	sprintf(name,"tmp/chld_%d",getpid());
@@ -40,7 +48,7 @@ void child_process(){
 	pck=message_receive(chld,&nserv);
 	printf("[%d] Server answered <%i> %s\n",getpid(),pck->type,pck->message);
 	close_lsocket(serv,0);
-	
+	lpacket_drop(pck);
 	/* Hardcore actions again */
 	sleep(2);
 	
@@ -69,9 +77,12 @@ void father_process(){
 	
 	open_lsocket(serv,AF_UNIX,SOCK_DGRAM);
 	bind_lsocket(serv);
-	
+
+	signal(SIGTERM,handler);
+	signal(SIGINT,handler);
+
 	add_lsocket(podr,serv,POLLIN);
-	while (1){
+	while (!should_quit){
 		actives=listen_lpodrum(podr,-1); 
 		for(i=0;actives[i]>=0;i++) {
 			/* Wait for the communication */
@@ -82,7 +93,7 @@ void father_process(){
 				sndr?(int)sndr->file:get_lsocket(podr,actives[i])->file,
 				pck->type,pck->message);
 			
-			/* 0 is the server address: new connections comes from here*/
+			/* 0 is the server address: new connections comes from here */
 			if (i==0 && pck->type==msg_sync) {
 				/* Create particular socket for him (note that it is generally not usefull)*/
 				sprintf(name,"tmp/nw_clnt_%d",nb_clients++);
@@ -98,11 +109,14 @@ void father_process(){
 				/* If he wants to die, well kill it */
 				del_lsocket(podr,actives[i]);
 			}
+			lpacket_drop(pck);
 		}
 		free(actives);
 	}
+	
 	close_lsocket(serv,1);
-	close_lsocket(sndr,0);
+	drop_lpodrum(podr,0);
+	
 }
 
 void test_sockets(){

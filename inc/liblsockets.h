@@ -134,6 +134,9 @@ void 	 close_lsocket	(lsocket*,int);							/**< [Public]: Terminate the connecti
 int 	 lsocket_send	(lsocket*,char*,int);					/**< [Privte] */
 lsocket* lsocket_receive(lsocket*,char*,int);					/**< [Privte] */
 
+/* Packet utilities */
+lpacket* lpacket_receive	(lsocket*);							/**< [Public]: Receive packet */
+void 	 lpacket_drop		(lpacket*);							/**< [Public]: Drop a packet */
 
 /* All the big wrapping functions user-kinda-friendly */
 int 	 message_send			(lsocket*,msg_type,char*);/**< [Public]: Send a message through the socket */
@@ -141,12 +144,11 @@ int 	 message_send_to		(lsocket*,msg_type,char*,lsocket*);	/**< [Public]: Send a
 lpacket* message_receive		(lsocket*,lsocket**);	/**< [Public]: Return the received socket, save the sending socket */
 
 lsocket* listen_lsocket	(lsocket*);						/**< [Public]: Listen to new incomming transmitions */
-
 lpodrum* make_lpodrum			(int);					/**< [Public]: Create new listening basement (podrum in croatian) */
 void	 add_lsocket			(lpodrum*,lsocket*,int);/**< [Public]: Add a num socket to the basement */
 lsocket* get_lsocket			(lpodrum*,int);			/**< [Public]: Get the socket number */
 int		 del_lsocket			(lpodrum*,int);			/**< [Public]: Delete the socket (int) from the basement */
 int* 	 listen_lpodrum			(lpodrum*,int timeout);	/**< [Public]: Return the list from all the socket ready to communicate */
 void	 purge_lpodrum			(lpodrum*);				/**< [Prvate]: Purge the lpodrum before usage */
-
+void	 drop_lpodrum			(lpodrum*,int);			/**< [Public]: Delete the lpodrum and free the memory */
 #endif /* __liblsockets_H__ */

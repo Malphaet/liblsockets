@@ -83,11 +83,12 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 	lsocket*rcv; lpacket*pck;
 	if (message==NULL) ERROR("lPacket malloc");
 	
-	rcv=lsocket_receive(recver_socket,message,SIZE_BUFFER-1);
+	rcv=lsocket_receive(recver_socket,message,SIZE_BUFFER);
 	pck=lpacket_request(message);
 	
 	if (sender_socket!=NULL) *sender_socket=rcv;
-	
+	else close_lsocket(rcv,0);
+	free(message);
 	return pck;
 }
 
@@ -235,15 +236,24 @@ int*listen_lpodrum(lpodrum*podr,int timer){
 	
 	/* Listen for awaiting requests */
 	nbs=poll(podr->fd_list,podr->cur_size,timer);
-	if (nbs<0) ERROR("Podrum poll");
+	if (nbs<0) {WARNING("Podrum poll");nbs=0;}
 	
 	/* Create the return list */
 	ret=malloc(sizeof(int)*(nbs+1));
 	if (ret==NULL) ERROR("Socket-indexes malloc");
 	for (i=0;i<podr->cur_size;i+=1) if (podr->fd_list[i].revents!=0) ret[j++]=i;
-	ret[j]=-1;
+	ret[j]=LPOP_ERROR;
 	
 	return ret;
 }
 
+
+void drop_lpodrum(lpodrum*podr,int purge){
+	int i;
+	free(podr->fd_list);
+	drop_lclist(podr->del_list);
+	if (purge) for(i=0;i<podr->cur_size;i++) close_lsocket(podr->sockets[i],0);
+	free(podr->sockets);
+	free(podr);
+}
 /** @} */

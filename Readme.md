@@ -53,6 +53,7 @@ The following function allow you to handle the task of waiting for incomming/out
 ### Important
 + @ref todo
 + Aim at the 0 leak
+  + Improve delete_lpodrum
 + Do the test on all other combination TCP unix, UDP inet.
 + Verbosity is not such a great idea
 

@@ -31,11 +31,12 @@
  */
  
 lpacket* lpacket_forge		(msg_type,char*);					/**< [Privte] */
-void 	 lpacket_drop		(lpacket*);							/**< [Privte] */
 lpacket* lpacket_request	(char*);							/**< [Privte] */
 char*	 lpacket_message	(lpacket*);							/**< [Privte] */
 int 	 lpacket_send		(lsocket*,lpacket*);				/**< [Privte] */
-lpacket* lpacket_receive	(lsocket*);							/**< [Public]: Receive packet */
+//lpacket* lpacket_receive	(lsocket*);							/**< [Public]: Receive packet */
+//void 	 lpacket_drop		(lpacket*);							/**< [Public]: Drop a packet */
+
 
 #endif /* __PACKETS_H__ */
 

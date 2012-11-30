@@ -113,6 +113,10 @@ lsocket*make_from_socket(struct sockaddr*sock,int type,int mode){
 		case AF_UNIX:
 			if(((struct sockaddr_un*)sock)->sun_path[0]==0) return NULL;
 			ret_sck=make_lsocket(((struct sockaddr_un*)sock)->sun_path);
+			/** @todo Check that part */
+			//ret_sck->socket=sock;
+			//ret_sck->mode=mode; ret_sck->type=type;
+			free(sock);
 			break;
 		case AF_INET:
 			WARNING("AF_INET protocol doesn't needs that function");
@@ -178,6 +182,7 @@ void close_lsocket(lsocket*sck,int shutd){
 	}
 	
 	close(sck->file);
+	free(sck->addr);
 	free(sck->socket);
 	free(sck);
 }
@@ -227,7 +232,6 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 		case SOCK_DGRAM:
 			
 			rcv_bytes=recvfrom(sck->file,message,bytes,0,sock,&bsize);
-			printf("%li, %d\n",sizeof(struct sockaddr),bsize);
 			if (rcv_bytes<0) {
 				printf("Error receiving packet from %s\n",sck->addr); //! @todo make debug only
 				ERROR("Reciving packet");
