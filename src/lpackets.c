@@ -79,7 +79,6 @@ lpacket*lpacket_request(char*message){
 }
 
 /** Create a message from given packet. 
- * @deprecated Use the communications wrappers instead
  * @param pck The packet to make as a message
  * @return A message made from the packet
  */
@@ -87,7 +86,7 @@ char *lpacket_message(lpacket*pck){
 	int size=strlen(pck->message)+5;
 	char*message=malloc(sizeof(char)*size);
 	if (message==NULL) ERROR("lPacket malloc");
-	sprintf(message,"%d %s\n",pck->type,pck->message);
+	sprintf(message,"%d %s\n",pck->type,pck->message); //! @todo Improve splitting mechanism
 	return message;
 }
 

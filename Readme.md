@@ -57,6 +57,7 @@ The following function allow you to handle the task of waiting for incomming/out
 + Do the test on all other combination TCP unix, UDP inet.
 + Correct the send/receive/splitting syntax ('\0' or such seems better)
 + Remove deprecated functions
++ Verbosity is not such a great idea
 
 ### Cosmetic
 

@@ -47,7 +47,7 @@
 #include <stropts.h>
 #include <poll.h>
 
-
+#include "utils.h"
 #include "structures.h"
 #include "wrappers.h"
 #include "lpackets.h"
@@ -75,9 +75,5 @@ void	 bind_lsocket	(lsocket*);								/**< [Public]: Bind the socket for answers
 void 	 close_lsocket	(lsocket*,int);							/**< [Public]: Terminate the connection */
 int 	 lsocket_send	(lsocket*,char*,int);					/**< [Privte] */
 lsocket* lsocket_receive(lsocket*,char*,int);					/**< [Privte] */
-
-/* High level communication: Deprecated, use Wrappers instead */
-int 	 lsocket_message_send		(lsocket*,msg_type,char*);	/**< [Public]: Deprecated - Send message */
-char*	 lsocket_message_receive	(lsocket*);					/**< [Public]: Deprecated - Return a raw message */
 
 #endif /* __liblsockets_H__ */

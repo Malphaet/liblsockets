@@ -11,7 +11,7 @@ DOC = doc
 TMP = tmp
 
 CFLAGS = -W -Wextra -Wall -ansi -pedantic -Wdeclaration-after-statement -Wunsafe-loop-optimizations\
-		 -std=c99 -Wshadow -O3 -I$(INC) 
+		 -std=c99 -Wshadow -O2 -I$(INC) 
 LDFLAGS = -L../../
 
 EXEC=liblsockets.a

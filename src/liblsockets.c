@@ -287,29 +287,4 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 	}
 }
 
-/** Sending a message, with less information to provide
- * @deprecated Only for debug purpose, a lot of informations can't be sent that way 
- * @param sck The socket to send through
- * @param type_message The type of message to send
- * @param message The message to send
- * @return The number of sended bytes
- */
-int lsocket_message_send(lsocket*sck,msg_type type_message,char *message){
-	lpacket*pck=lpacket_forge(type_message,message);
-	lpacket_send(sck,pck);
-	lpacket_drop(pck);
-	return lpacket_snd_bytes;
-}
-
-/** Receive a message with less information to provide
- * @deprecated Only for debug purpose, a lot of information is lost in the process.
- * @param sck Tje socket to receive from
- * @return The received message
- */
-char *lsocket_message_receive(lsocket*sck){
-	char*message=malloc(sizeof(char)*SIZE_BUFFER);
-	lsocket_receive(sck,message,SIZE_BUFFER);
-	return message;
-}
-
 /**@}*/

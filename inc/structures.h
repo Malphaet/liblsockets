@@ -86,7 +86,7 @@ typedef struct pk_struct {
  */
 
 typedef struct int_chained_list {
-	DATATYPE data;					/**< Data holded by the chained list */
+	int data;					/**< Data holded by the chained list */
 	struct int_chained_list*next;	/**< Next member of the chained list */
 } lclist;
 
