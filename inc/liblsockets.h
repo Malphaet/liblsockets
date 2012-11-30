@@ -56,10 +56,6 @@
 #define SIZE_ADDR 108				/**< Size of the socket address */
 #define SIZE_PENDING 10			/**< Standard size of pending connections for listening socket */
 
-/* Global variables */
-volatile int lpacket_rcv_bytes;	/**< Number of received bytes */
-volatile int lpacket_snd_bytes;	/**< Number of sended bytes */
-
 /* ======== Structures ========*/
 
 
@@ -111,6 +107,7 @@ typedef struct sk_addr{
 typedef struct pk_struct {
 	msg_type type;		/**< The request being done, important for having normalised communications */
 	char*message;		/**< The body of the message, can be empty */
+	unsigned int bytes;/**< The number of bytes processed by the last request */
 } lpacket;
 
 /** A basement made of sockets

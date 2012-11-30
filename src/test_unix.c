@@ -51,6 +51,7 @@ void child_process(){
 	message_send(nserv,msg_kill,"Ciao");
 	printf("[%d] Exiting\n",getpid());
 	
+	
 	close_lsocket(nserv,0);
 	close_lsocket(chld,1);
 	exit(EXIT_SUCCESS);

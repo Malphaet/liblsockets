@@ -35,7 +35,7 @@
  * \li lpacket_send()
  * \li lpacket_drop()
  *
- * Moreover, the following functions should be avoided:
+ * Moreover, the following functions are restricted:
  * \li lpacket_message()
  * \li lpacket_receive()
  * @{
@@ -74,7 +74,7 @@ lpacket*lpacket_request(char*message){
 	int type;
 	char*pck_message;
 	type=atoi(strtok(message," "));
-	pck_message=strtok(NULL,"\0"); /**< @todo change the splitting mechanism */
+	pck_message=strtok(NULL,"\0");
 	return lpacket_forge(type,pck_message);
 }
 
@@ -92,17 +92,22 @@ char *lpacket_message(lpacket*pck){
 
 /** Send a packet through the given socket.
  * Note that you will NOT receive the number of readed packets.
- * You can access that information through @ref lpacket_snd_bytes. @todo change that behavior
+ * You can access that information through @ref lpacket::bytes.
  * @param sck Witch socket will receive the packet (or the sender socket if connected)
  * @param pck The packet to send
+ * @return The sucess or failure of the request
  */
-void lpacket_send(lsocket*sck,lpacket*pck){
-	lpacket_snd_bytes=lsocket_send(sck,lpacket_message(pck),strlen(pck->message)+5);
+int lpacket_send(lsocket*sck,lpacket*pck){
+	char*message=lpacket_message(pck);
+	if (lsocket_send(sck,message,strlen(message)+1)==(int)strlen(message)+1)
+		return 1;
+	else WARNING("Socket sending error"); 
+		return 0;
 }
 
 /** Receive a packet through the given socket
- * Note that you will receive a socket not the number of readed packets. 
- * You can access that information through @ref lpacket_rcv_bytes. @todo change that behavior
+ * Note that you will receive a packet not the number of readed bytes. 
+ * You can access that information through @ref lpacket::bytes.
  * @param sck The socket to receive through
  * @return The received packet
  */
