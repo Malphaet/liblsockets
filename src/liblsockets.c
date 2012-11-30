@@ -60,7 +60,7 @@ void open_lsocket(lsocket*sck,int type,int mode){
 	struct sockaddr_un*sock_un; struct sockaddr_in *sock_in; 
 	char*tmp;
 	struct hostent *server;
-	if ((sck->file=socket(type,mode,0))<0) ERROR("Socket opening was impossible");
+	if ((sck->file=socket(type,mode,0))<=0) ERROR("Socket opening was impossible");
 	
 	switch (type){
 		case AF_UNIX:
@@ -69,7 +69,7 @@ void open_lsocket(lsocket*sck,int type,int mode){
 			
 			sock_un->sun_family=type;
 			strcpy(sock_un->sun_path,sck->addr);
-			
+
 			sck->socket=(struct sockaddr*)sock_un;
 			sck->mode=mode; sck->type=type;
 			break;
@@ -84,8 +84,7 @@ void open_lsocket(lsocket*sck,int type,int mode){
 				if (server == NULL) OUT("Host cannot be found");
     			memcpy((char *)&(sock_in->sin_addr.s_addr),(char *)server->h_addr_list[0], server->h_length);
 			}
-/*			else sock_in->sin_addr.s_addr=inet_addr(tmp); */
-    		
+			
 			tmp=strtok(NULL,"");
 			sock_in->sin_port=htons(atoi(tmp));
 			sock_in->sin_family=AF_INET;
@@ -222,27 +221,27 @@ int lsocket_send(lsocket*sck,char*message,int bytes){
 lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 	unsigned int bsize=sizeof(struct sockaddr_un);
 	lsocket*recv_sck=NULL;
-	
+	int rcv_bytes;
 	struct sockaddr*sock=calloc(1,sizeof(struct sockaddr));
 	
 	switch (sck->mode){
 		case SOCK_DGRAM:
-			lpacket_rcv_bytes=recvfrom(sck->file,message,bytes,0,sock,&bsize);
-			if (lpacket_rcv_bytes<0) {
+			rcv_bytes=recvfrom(sck->file,message,bytes,0,sock,&bsize);
+			if (rcv_bytes<0) {
 				printf("Error receiving packet from %s\n",sck->addr); //! @todo make debug only
 				ERROR("Reciving packet");
 			}
 			if (sock!=NULL) recv_sck=make_from_socket((struct sockaddr*)sock,sck->type,sck->mode);
 			return recv_sck;
 		case SOCK_STREAM:
-			lpacket_rcv_bytes=recv(sck->file,message,bytes,0);
-			if (lpacket_rcv_bytes<0) {
+			rcv_bytes=recv(sck->file,message,bytes,0);
+			if (rcv_bytes<0) {
 				printf("Error receiving packet from %s\n",sck->addr);
 				ERROR("Reciving packet");
 			}
 			return sck->sendto;
 		default:
-			lpacket_rcv_bytes=read(sck->file,message,bytes);
+			rcv_bytes=read(sck->file,message,bytes);
 			return NULL;
 	}
 }

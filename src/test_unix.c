@@ -45,11 +45,12 @@ void child_process(){
 	sleep(2);
 	
 	/* Send results */
-	message_send_to(chld,msg_text,"Here I am",serv);
+	message_send_to(chld,msg_text,"Here I am",nserv);
 	
 	/* Quit */
 	message_send(nserv,msg_kill,"Ciao");
 	printf("[%d] Exiting\n",getpid());
+	
 	
 	close_lsocket(nserv,0);
 	close_lsocket(chld,1);

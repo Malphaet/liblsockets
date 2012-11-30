@@ -36,14 +36,14 @@
  * @param type_message The type of the message (msg_type definitions are pretty clear)
  * @param msg The message itself
  * 
- * @return Number of sended bytes
- * @todo Thread-safe
+ * @return The sucess or failure of the request
  */
 int message_send(lsocket*sender_socket,msg_type type_message,char*msg){
+	int status;
 	lpacket*pck=lpacket_forge(type_message,msg);
-	lpacket_send(sender_socket,pck);
+	status=lpacket_send(sender_socket,pck);
 	lpacket_drop(pck);
-	return lpacket_snd_bytes;
+	return status;
 }
 
 /** Send a message through a socket specifiying a different destination for one connection.
@@ -52,21 +52,20 @@ int message_send(lsocket*sender_socket,msg_type type_message,char*msg){
  * @param type_message The type of the message (msg_type definitions are pretty clear)
  * @param msg The message itself
  * Note that this function only makes sense on SOCK_DGRAM mode.
- * @return Number of sended bytes
- * @todo Thread-safe
+ * @return Status of the request
  */
 int message_send_to(lsocket*sender_socket,msg_type type_message,char*msg,lsocket*dest){
 	lsocket*old_d;
+	int status;
 	switch (sender_socket->mode){
 		case SOCK_DGRAM:
 			old_d=sender_socket->sendto;
 			connect_lsocket(sender_socket,dest);
-			message_send(sender_socket,type_message,msg);
+			status=message_send(sender_socket,type_message,msg);
 			connect_lsocket(sender_socket,old_d);
-			return lpacket_snd_bytes;
+			return status;
 		case SOCK_STREAM:
-			message_send(sender_socket,type_message,msg);
-			return lpacket_snd_bytes;
+			return message_send(sender_socket,type_message,msg);
 		default:
 			OUT("Unhandled mode");
 			break;

@@ -19,7 +19,7 @@
  */
 
 #include "liblsockets.h"
-#include "wrappers.h"
+
 /** @file test.c Tests
  *
  * A little test program, uncomment the part you wanna test on the main functions, and compile it with make test
@@ -32,7 +32,7 @@
 void test_lists(){
 	lclist*liste=make_lclist();
 	lclist*curr;
-	add_lclist(liste,12);
+	add_lclist(liste,24);
 	add_lclist(liste,42);
 	add_lclist(liste,'$');
 	
