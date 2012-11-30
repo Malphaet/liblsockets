@@ -35,6 +35,9 @@
 /** @def ERROR(msg) 
  * Print the current error, with the error message @a msg and exits
  */
+/** @def WARNING(msg) 
+ * Print the current error, with the error message @a msg and exits if the program is in debug mode.
+ */
 
 /** @def OUT(msg) 
  * Exits the program with the message @a msg
@@ -50,8 +53,9 @@ int verbose; /**< Verbosity of the program */
 /* Functions */
 
 
-#define WHERE		printf("In %s line %d (%s)\n",__FILE__,__LINE__,__func__)
-#define ERROR(msg)	{WHERE; perror(msg);printf("\n");exit(EXIT_FAILURE);}
+#define WHERE		printf("In %s line %d (%d:%s)\n",__FILE__,__LINE__,getpid(),__func__)
+#define ERROR(msg)	{printf("ERROR: ");WHERE; perror(msg);printf("\n");exit(EXIT_FAILURE);}
+#define WARNING(msg){printf("WARNING: ");WHERE;  perror(msg);printf("\n");}
 #define OUT(msg)	{WHERE; fprintf(stderr,msg);fprintf(stderr,"\n");exit(EXIT_FAILURE);}
 #define FPRINT(msg)	{fprintf(stdout,msg);fflush(stdout);}
 #endif /* __UTILS_H__ */

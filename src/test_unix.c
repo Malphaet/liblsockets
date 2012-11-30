@@ -45,7 +45,7 @@ void child_process(){
 	sleep(2);
 	
 	/* Send results */
-	message_send_to(chld,msg_text,"Here I am",serv);
+	message_send_to(chld,msg_text,"Here I am",nserv);
 	
 	/* Quit */
 	message_send(nserv,msg_kill,"Ciao");
@@ -71,8 +71,7 @@ void father_process(){
 	
 	add_lsocket(podr,serv,POLLIN);
 	while (1){
-		actives=listen_lpodrum(podr,-1);
-		WHERE;
+		actives=listen_lpodrum(podr,-1); 
 		for(i=0;actives[i]>=0;i++) {
 			/* Wait for the communication */
 			printf("[Server] Waiting %s:%d\n",get_lsocket(podr,actives[i])->addr,get_lsocket(podr,actives[i])->file);

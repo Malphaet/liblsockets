@@ -74,7 +74,7 @@ lpacket*lpacket_request(char*message){
 	int type;
 	char*pck_message;
 	type=atoi(strtok(message," "));
-	pck_message=strtok(NULL,"\n"); /**< @todo change the splitting mechanism */
+	pck_message=strtok(NULL,"\0"); /**< @todo change the splitting mechanism */
 	return lpacket_forge(type,pck_message);
 }
 
@@ -86,7 +86,7 @@ char *lpacket_message(lpacket*pck){
 	int size=strlen(pck->message)+5;
 	char*message=malloc(sizeof(char)*size);
 	if (message==NULL) ERROR("lPacket malloc");
-	sprintf(message,"%d %s\n",pck->type,pck->message); //! @todo Improve splitting mechanism
+	sprintf(message,"%d %s",pck->type,pck->message); //! @todo Improve splitting mechanism
 	return message;
 }
 

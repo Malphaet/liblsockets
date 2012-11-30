@@ -116,9 +116,8 @@ lsocket*make_from_socket(struct sockaddr*sock,int type,int mode){
 			ret_sck=make_lsocket(((struct sockaddr_un*)sock)->sun_path);
 			break;
 		case AF_INET:
-			// OUT("AF_INET protocol doesn't needs that function");
+			WARNING("AF_INET protocol doesn't needs that function");
 			return NULL;
-			// break;
 		default:
 			OUT("Unhandled mode");
 			break;
