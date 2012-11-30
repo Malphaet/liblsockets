@@ -110,8 +110,8 @@ void test_sockets(){
 	p=fork();
 	if (p) father_process();
 	else {
-		fork();
-		fork();
+		//fork();
+		//fork();
 		child_process();
 	}
 }

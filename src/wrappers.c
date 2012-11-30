@@ -79,11 +79,11 @@ int message_send_to(lsocket*sender_socket,msg_type type_message,char*msg,lsocket
  * @return The received packet
  */
 lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
-	char*message=malloc(sizeof(char)*SIZE_BUFFER);
+	char*message=calloc(1,sizeof(char)*SIZE_BUFFER);
 	lsocket*rcv; lpacket*pck;
 	if (message==NULL) ERROR("lPacket malloc");
 	
-	rcv=lsocket_receive(recver_socket,message,SIZE_BUFFER);
+	rcv=lsocket_receive(recver_socket,message,SIZE_BUFFER-1);
 	pck=lpacket_request(message);
 	
 	if (sender_socket!=NULL) *sender_socket=rcv;

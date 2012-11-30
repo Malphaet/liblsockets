@@ -221,11 +221,13 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 	unsigned int bsize=sizeof(struct sockaddr_un);
 	lsocket*recv_sck=NULL;
 	int rcv_bytes;
-	struct sockaddr*sock=calloc(1,sizeof(struct sockaddr));
+	struct sockaddr*sock=(struct sockaddr*)calloc(1,sizeof(struct sockaddr_un));
 	
 	switch (sck->mode){
 		case SOCK_DGRAM:
+			
 			rcv_bytes=recvfrom(sck->file,message,bytes,0,sock,&bsize);
+			printf("%li, %d\n",sizeof(struct sockaddr),bsize);
 			if (rcv_bytes<0) {
 				printf("Error receiving packet from %s\n",sck->addr); //! @todo make debug only
 				ERROR("Reciving packet");

@@ -1,5 +1,6 @@
 # Object files
 *.o
+
 # Documentation
 doc/
 
@@ -17,3 +18,4 @@ doc/
 *.exe
 *.out
 *.app
+bin/
