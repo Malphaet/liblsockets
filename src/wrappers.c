@@ -35,6 +35,9 @@
  * @param sender_socket The receiver's socket if not connected, sender's if connected (lsockets allow to connect even UDP sockets)
  * @param type_message The type of the message (msg_type definitions are pretty clear)
  * @param msg The message itself
+ * 
+ * @return Number of sended bytes
+ * @todo Thread-safe
  */
 int message_send(lsocket*sender_socket,msg_type type_message,char*msg){
 	lpacket*pck=lpacket_forge(type_message,msg);
@@ -49,6 +52,8 @@ int message_send(lsocket*sender_socket,msg_type type_message,char*msg){
  * @param type_message The type of the message (msg_type definitions are pretty clear)
  * @param msg The message itself
  * Note that this function only makes sense on SOCK_DGRAM mode.
+ * @return Number of sended bytes
+ * @todo Thread-safe
  */
 int message_send_to(lsocket*sender_socket,msg_type type_message,char*msg,lsocket*dest){
 	lsocket*old_d;
@@ -71,6 +76,8 @@ int message_send_to(lsocket*sender_socket,msg_type type_message,char*msg,lsocket
 /** Big receiving function 
  * @param recver_socket The socket used for receiving the message
  * @param sender_socket The socket with will contain the sender's socket (if binded)
+ * 
+ * @return The received packet
  */
 lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 	char*message=malloc(sizeof(char)*SIZE_BUFFER);
@@ -87,6 +94,7 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 
 /** Create new listening set (a basement: podrum in croatian) 
  * @param size Size of the future socket list
+ * @return The created lpodrum
  */
 lpodrum* make_lpodrum(int size){
 	lsocket**sock_list=malloc(sizeof(lsocket*)*size);
@@ -118,7 +126,7 @@ lpodrum* make_lpodrum(int size){
  * Receving only :
  * \li POLLNVAL Invalid request: fd not open (output only).
  * \li POLLHUP The device has been disconnected. This event and POLLOUT are mutually-exclusive;
- *
+ * 
  */
 void add_lsocket(lpodrum*podr,lsocket*sock,int type){
 	if (podr->cur_size==podr->max_size) OUT("Podrum max size reached (basement overflow)");
@@ -128,16 +136,22 @@ void add_lsocket(lpodrum*podr,lsocket*sock,int type){
 	podr->cur_size++;
 }
 
-/** Get the socket number (nb) out of the listening basement */
+/** Get a socket number out of the listening basement 
+ * @param podr The listening basement to consider
+ * @param nb The index of socket to get
+ * @return The retreived socket
+ */
 lsocket* get_lsocket(lpodrum*podr,int nb){
 	if (podr->cur_size-1<nb) OUT("Index out of range");
 	return podr->sockets[nb];
 }
 
-/** Delete the socket (nb) from the basement
- *
+/** Delete the socket from the basement
+ * @param podr The listening basement to consider
+ * @param nb The index of the socket to remove
  * Note that the deletion is not immediate. 
  * It will take place when the listener is called again.
+ * @return -1 in case of error, the index otherwise
  */
 int del_lsocket(lpodrum*podr,int nb){
 	if (podr->cur_size-1<nb) return -1;
@@ -146,8 +160,8 @@ int del_lsocket(lpodrum*podr,int nb){
 }
 
 /** Purge the podrum before using it 
- *
- * Note that it is NOT supposed to be user-trigerred
+ * @param podr The podrum to purge
+ * Note that it is NOT supposed to be user-trigerred	
  */
 
 void purge_lpodrum(lpodrum*podr){
@@ -168,9 +182,10 @@ void purge_lpodrum(lpodrum*podr){
 	}
 }
 
-/** Return the list from all the socket ready to communicate 
+/** List all the socket ready to communicate 
  * @param podr The lpodrum for the listening
- * @param time Timeout before forced return (-1 for disabling)
+ * @param timer Timeout before forced return (-1 for disabling)
+ * @return The list of sockets's indexes ready to communicate
  */
 int*listen_lpodrum(lpodrum*podr,int timer){
 	int i,j=0;

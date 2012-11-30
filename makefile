@@ -54,9 +54,10 @@ test: $(SRC)/test.c $(DEST)/$(EXEC) $(SRC)/test_inet.c $(SRC)/test_unix.c
 doc: .PHONY
 	$(QUIET)echo ""
 	$(QUIET)echo "__"$@"__"
-	$(QUIET)doxygen Doxyfile
 	$(QUIET)echo "MAKE DOCS"
-
+	$(QUIET)doxygen Doxyfile
+	$(QUIET)echo ""
+	
 edit:
 	$(EDITOR) 2> /dev/null $(SRC)/* $(INC)/* makefile Readme.md Doxyfile &
 	

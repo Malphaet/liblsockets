@@ -30,12 +30,12 @@
  * Library for packet managing, note that all functions are not meant to be user handled
  */
  
-lpacket* lpacket_forge		(msg_type,char*);					/* [Privte] */
-void 	 lpacket_drop		(lpacket*);							/* [Privte] */
-lpacket* lpacket_request	(char*);							/* [Privte] */
-char*	 lpacket_message	(lpacket*);							/* [Privte] */
-void 	 lpacket_send		(lsocket*,lpacket*);				/* [Privte] */
-lpacket* lpacket_receive	(lsocket*);							/* [Public]: Receive packet */
+lpacket* lpacket_forge		(msg_type,char*);					/**< [Privte] */
+void 	 lpacket_drop		(lpacket*);							/**< [Privte] */
+lpacket* lpacket_request	(char*);							/**< [Privte] */
+char*	 lpacket_message	(lpacket*);							/**< [Privte] */
+void 	 lpacket_send		(lsocket*,lpacket*);				/**< [Privte] */
+lpacket* lpacket_receive	(lsocket*);							/**< [Public]: Receive packet */
 
 #endif /* __PACKETS_H__ */
 

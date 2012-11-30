@@ -51,8 +51,13 @@ The following function allow you to handle the task of waiting for incomming/out
 ## Todo
 
 ### Important
++ @ref todo
 + make functions thread_safe
++ Aim at the 0 leak
 + Do the test on all other combination TCP unix, UDP inet.
++ Correct the send/receive/splitting syntax ('\0' or such seems better)
++ Remove deprecated functions
+
 ### Cosmetic
 
 ### Test:
@@ -60,7 +65,6 @@ The following function allow you to handle the task of waiting for incomming/out
 + close_lsocket: Done
 + lsocket_send: Done
 + lsocket_receive: Done
-
 + lsocket_message_send: Done
 + lsocket_message_receive: Done
 
@@ -69,8 +73,8 @@ The following function allow you to handle the task of waiting for incomming/out
 + make_from_lsocket corrections
 + listen_lsocket() listen for new sockets
 
-[Modules]: 	./modules.html 				"List of all modules"
+[Modules]:  ./modules.html 			"List of all modules"
 [Wrappers]: ./group___wrappers.html 	"Comunication managers"
-[Clists]: 	./group___clists.html 		"Chained Lists"
-[lSockets]:	./group__liblsockets.html	"Little Socket Library"
-[lPackets]: ./group___packetlib.html	"Little Packet Library"
+[Clists]: 	 ./group___clists.html 		"Chained Lists"
+[lSockets]:	 ./group__liblsockets.html	"Little Socket Library"
+[lPackets]:  ./group___packetlib.html	"Little Packet Library"

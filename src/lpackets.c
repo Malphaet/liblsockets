@@ -42,8 +42,10 @@
  */
 
 /** Forge a packet with the given information.
- *
  * For memory usage reason, the message is copied not linked, free it if needed.
+ * @param type The type of sended message
+ * @param message The message to send
+ * @return The forged packet
  */
 lpacket*lpacket_forge(msg_type type,char *message){
 	lpacket*pck=malloc(sizeof(lpacket));
@@ -57,22 +59,30 @@ lpacket*lpacket_forge(msg_type type,char *message){
 	return pck;
 }
 
-/** Drop a packet and free the allocated memory. */
+/** Drop a packet and free the allocated memory. 
+ * @param pck The packet to drop
+ */
 void lpacket_drop(lpacket*pck){
 	free(pck->message);free(pck);
 }
 
-/** Create a packet from the given message. */
+/** Create a packet from the given message. 
+ * @param message The message to split
+ * @return The forged packet
+ */
 lpacket*lpacket_request(char*message){
 	int type;
 	char*pck_message;
 	type=atoi(strtok(message," "));
-	pck_message=strtok(NULL,"\n");
+	pck_message=strtok(NULL,"\n"); /**< @todo change the splitting mechanism */
 	return lpacket_forge(type,pck_message);
 }
 
-/** DPR - Create a message from given packet. 
- * @deprecated Use the communications wrappers instead*/
+/** Create a message from given packet. 
+ * @deprecated Use the communications wrappers instead
+ * @param pck The packet to make as a message
+ * @return A message made from the packet
+ */
 char *lpacket_message(lpacket*pck){
 	int size=strlen(pck->message)+5;
 	char*message=malloc(sizeof(char)*size);
@@ -82,9 +92,8 @@ char *lpacket_message(lpacket*pck){
 }
 
 /** Send a packet through the given socket.
- *
  * Note that you will NOT receive the number of readed packets.
- * You can access that information through ::lpacket_snd_bytes.
+ * You can access that information through @ref lpacket_snd_bytes. @todo change that behavior
  * @param sck Witch socket will receive the packet (or the sender socket if connected)
  * @param pck The packet to send
  */
@@ -93,9 +102,10 @@ void lpacket_send(lsocket*sck,lpacket*pck){
 }
 
 /** Receive a packet through the given socket
- *
  * Note that you will receive a socket not the number of readed packets. 
- * You can access that information through packet_rcv_bytes.
+ * You can access that information through @ref lpacket_rcv_bytes. @todo change that behavior
+ * @param sck The socket to receive through
+ * @return The received packet
  */
 lpacket*lpacket_receive(lsocket*sck){
 	char*message=malloc(sizeof(char)*SIZE_BUFFER);

@@ -45,7 +45,7 @@
  */
 
 /* ========= Defines ==========*/
-int verbose; /*< Verbosity of the program */
+int verbose; /**< Verbosity of the program */
 
 /* Functions */
 

@@ -66,7 +66,7 @@ typedef struct sk_addr{
 	int type;					/**< The type of connection (AF_UNIX)*/
 	int mode;					/**< The mode of connection (SOCK_DGRAM) */
 	struct sockaddr* socket;	/**< The linked socket */
-	struct sk_addr* sendto;		/**< The socket to send to */
+	struct sk_addr* sendto;	/**< The socket to send to */
 } lsocket;
 
 
@@ -86,8 +86,8 @@ typedef struct pk_struct {
  */
 
 typedef struct int_chained_list {
-	int data;
-	struct int_chained_list*next;
+	DATATYPE data;					/**< Data holded by the chained list */
+	struct int_chained_list*next;	/**< Next member of the chained list */
 } lclist;
 
 /** A basement made of sockets

@@ -18,6 +18,7 @@
  * along with liblsockets. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "lclists.h"
 
 /** @file lclists.c Chained List Library (code) */
@@ -27,23 +28,30 @@
  */
 /** @{ */
 
-/** Make a new chained list */
+/** Make a new chained list 
+ * @return The created list
+ */
 lclist* make_lclist(){
 	lclist*l=malloc(sizeof(lclist));
-	l->data='u';
+	l->data=LPOP_ERROR;
 	l->next=NULL;
 	if (l==NULL) ERROR("Clist creation error");
 	return l;
 }
 
-/** Drop the list */
+/** Drop the list 
+ * @param l The list to drop
+ */
 void drop_lclist(lclist*l){
 	lclist*next,*curr;
 	for (curr=l;(next=curr->next)!=NULL;curr=next) free(curr);
 	free(curr);
 }
 
-/**Add an element to the list */
+/**Add an element to the list 
+ * @param l The list to add to
+ * @param data The data to add
+ */
 void add_lclist(lclist*l,DATATYPE data){
 	lclist*new=malloc(sizeof(lclist));
 	new->data=data;
@@ -51,7 +59,10 @@ void add_lclist(lclist*l,DATATYPE data){
 	l->next=new;
 }
 
-/** Delete the first element of the list */
+/** Delete the first element of the list 
+ * @param l The list to consider
+ * @return The deleted data
+ */
 DATATYPE pop_lclist(lclist*l){
 	DATATYPE ret; lclist*new;
 	if (l->next==NULL) return LPOP_ERROR;
@@ -62,7 +73,10 @@ DATATYPE pop_lclist(lclist*l){
 	return ret;
 }
 
-/** Lenght of the list */
+/** Lenght of the list 
+ * @param l The list to measure
+ * @return The lenght of the list
+ */
 int len_lclist(lclist*l){
 	int ln=0; lclist*curr=l;
 	while ((curr=curr->next)!=NULL) ln++;

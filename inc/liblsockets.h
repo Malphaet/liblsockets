@@ -47,7 +47,7 @@
 #include <stropts.h>
 #include <poll.h>
 
-#include "utils.h"
+
 #include "structures.h"
 #include "wrappers.h"
 #include "lpackets.h"
@@ -57,7 +57,7 @@
 
 #define SIZE_BUFFER 1024			/**< Size of the socket carried message */
 #define SIZE_ADDR 108				/**< Size of the socket address */
-#define SIZE_PENDING 10
+#define SIZE_PENDING 10			/**< Standard size of pending connections for listening socket */
 
 /* Global variables */
 volatile int lpacket_rcv_bytes;	/**< Number of received bytes */
@@ -66,15 +66,15 @@ volatile int lpacket_snd_bytes;	/**< Number of sended bytes */
 /* ======== Prototype =========*/
 
 /* Low level communication */
-lsocket* make_lsocket	(char*);								/**< [Public]: Create new socket */ /* TODO: Improve */
+lsocket* make_lsocket	(char*);								/**< [Public]: Create new socket */
 lsocket* make_from_socket(struct sockaddr*,int,int);			/**< [Privte] */
-void 	 open_lsocket	(lsocket*,int,int);						/**< [Public]: Open the socket for communications */
+void 	 open_lsocket	(lsocket*,int,int);					/**< [Public]: Open the socket for communications */
 void 	 connect_lsocket(lsocket*,lsocket*);					/**< [Public]: Connect the socket to another */
 lsocket* listen_lsocket	(lsocket*);								/**< [Public]: Listen to new incomming transmitions */
 void	 bind_lsocket	(lsocket*);								/**< [Public]: Bind the socket for answers */
 void 	 close_lsocket	(lsocket*,int);							/**< [Public]: Terminate the connection */
-int 	 lsocket_send	(lsocket*,char*,int);					/**< [Privte] */					/* TODO: Split messages */
-lsocket* lsocket_receive(lsocket*,char*,int);					/**< [Privte] */					/* TODO: Split messages */
+int 	 lsocket_send	(lsocket*,char*,int);					/**< [Privte] */
+lsocket* lsocket_receive(lsocket*,char*,int);					/**< [Privte] */
 
 /* High level communication: Deprecated, use Wrappers instead */
 int 	 lsocket_message_send		(lsocket*,msg_type,char*);	/**< [Public]: Deprecated - Send message */
