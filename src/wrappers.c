@@ -92,6 +92,46 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 	return pck;
 }
 
+/** Listen to new incomming transmitions on socket
+ * @param sock The socket listen to
+ * @return The socket who connected to the server
+ * On SOCK_DGRAM it's a lame receiving server
+ * On SOCK_STREAM it behave as the standard listening function
+ */
+lsocket* listen_lsocket(lsocket*sock){
+	lsocket*new=NULL; lpacket*pck;
+	unsigned int size; char*name;
+	struct sockaddr_in*new_addr=NULL;
+	
+	switch(sock->mode){
+		case (SOCK_DGRAM):
+			do{
+				pck=message_receive(sock,&new);
+			} while (pck->type!=msg_sync);
+			break;
+		case (SOCK_STREAM):
+			new=malloc(sizeof(struct sockaddr_in));
+			new_addr=malloc(sizeof(struct sockaddr));
+			name=malloc(sizeof(char)*SIZE_ADDR);
+			size=sizeof(struct sockaddr_in);
+			if (new==NULL) ERROR("Returned socket malloc");
+			if (new_addr==NULL) ERROR("Listening socket malloc");
+			
+			listen(sock->file,SIZE_PENDING);
+			if ((new->file=accept(sock->file,(struct sockaddr*)new_addr,&size))<0) ERROR("Accept error");
+			if (new_addr==NULL) OUT("Error receiving socket");
+			sprintf(name,"%s:%d",inet_ntoa(new_addr->sin_addr),ntohs(new_addr->sin_port));
+						
+			new->type=sock->type; new->mode=sock->mode;
+			new->addr=name; new->sendto=new;
+			break;
+		default:
+			OUT("Unhandled Mode");
+			break;
+	}
+	return new;
+}	
+
 /** Create new listening set (a basement: podrum in croatian) 
  * @param size Size of the future socket list
  * @return The created lpodrum

@@ -19,7 +19,7 @@
  */
 
 #include "liblsockets.h"
-
+#include "wrappers.h"
 /** @file test.c Tests
  *
  * A little test program, uncomment the part you wanna test on the main functions, and compile it with make test

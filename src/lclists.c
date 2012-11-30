@@ -35,7 +35,10 @@ lclist* make_lclist(){
 	lclist*l=malloc(sizeof(lclist));
 	l->data=LPOP_ERROR;
 	l->next=NULL;
-	if (l==NULL) ERROR("Clist creation error");
+	if (l==NULL) {
+		perror("List malloc error");
+		exit(EXIT_FAILURE);
+	}
 	return l;
 }
 

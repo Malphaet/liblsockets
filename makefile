@@ -39,7 +39,7 @@ $(EXEC): $(OBJ)/$(MAIN).o $(OBJ)/wrappers.o $(OBJ)/lpackets.o $(OBJ)/lclists.o
 	$(QUIET)ln -sf $(PLACE)/$(INC)/lpackets.h $(DEST)/lpsckets.h
 
 
-$(OBJ)/%.o: $(SRC)/%.c $(INC)/%.h $(INC)/utils.h $(INC)/structures.h
+$(OBJ)/%.o: $(SRC)/%.c $(INC)/%.h $(INC)/utils.h
 	$(QUIET)echo "MAKE" $^ "=>" $@
 	$(QUIET)$(CC) -c $(CFLAGS) $< -o $@
 
