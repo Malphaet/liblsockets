@@ -65,8 +65,6 @@ void open_lsocket(lsocket*sck,int type,int mode){
 	switch (type){
 		case AF_UNIX:
 			sock_un=malloc(sizeof(struct sockaddr_un));
-
-			printf(">> [%d] CREATED %p\n",getpid(),(void*)sock_un);
 			if (sock_un==NULL) ERROR("Socket malloc");
 			
 			sock_un->sun_family=type;
@@ -188,8 +186,6 @@ void close_lsocket(lsocket*sck,int shutd){
 	
 	close(sck->file);
 	free(sck->addr);
-	
-	printf("<< [%d] DELETED %p\n",getpid(),(void*)sck->socket);
 	free(sck->socket);
 
 	free(sck);
@@ -237,7 +233,6 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 	struct sockaddr*sock=calloc(1,sizeof(struct sockaddr_un));
 	if (sock==NULL) ERROR("Malloc reply socket");
 	
-	printf(">> [%d] R-CREATED %p\n",getpid(),(void*)sock);
 	switch (sck->mode){
 		case SOCK_DGRAM:
 			

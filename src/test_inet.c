@@ -24,6 +24,8 @@ void inet_chld_process(){
 	sleep(1);
 	connect_lsocket(serv,NULL);
 	message_send(serv,msg_text,"MOOOOO");
+	message_receive(serv,NULL);
+	message_send(serv,msg_kill,);
 	close_lsocket(serv,2);
 	return;
 }
@@ -55,6 +57,7 @@ void inet_fath_process(){
 	/* Main loop */
 	while(1){
 		/* Wait for the communication */
+		
 		clnt=listen_lsocket(serv);
 		printf("[Server] Waiting %s:%d\n",clnt->addr,clnt->file);
 		inet_new_clnt_process(clnt);
