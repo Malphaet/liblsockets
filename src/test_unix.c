@@ -21,9 +21,10 @@
 
 int volatile should_quit=0;
 void handler(int sig){
-	if (sig==SIGINT) printf("Yeah\n");
+	if (sig==SIGINT) {
 		printf("[%d] Calmly exiting\n",getpid());
 		should_quit=1;
+	}
 }
 
 void child_process(){
@@ -39,8 +40,8 @@ void child_process(){
 	bind_lsocket(chld);
 	
 	/* Hardcore setup actions */
-	srand(getpid());
-	sleep(rand()%4);
+	//srand(getpid());
+	//sleep(rand()%4);
 	
 	/* Handshake */
 	printf("[%d] Awake, sending message\n",getpid());
@@ -50,11 +51,12 @@ void child_process(){
 	close_lsocket(serv,0);
 	lpacket_drop(pck);
 	/* Hardcore actions again */
-	sleep(2);
+	//sleep(2);
 	
 	/* Send results */
 	message_send_to(chld,msg_text,"Here I am",nserv);
-	
+	message_send_to(chld,msg_text,"I",nserv);
+
 	/* Quit */
 	message_send(nserv,msg_kill,"Ciao");
 	printf("[%d] Exiting\n",getpid());
@@ -88,10 +90,10 @@ void father_process(){
 			/* Wait for the communication */
 			printf("[Server] Waiting %s:%d\n",get_lsocket(podr,actives[i])->addr,get_lsocket(podr,actives[i])->file);
 			pck=message_receive(get_lsocket(podr,actives[i]),&sndr);
-			printf("[Server] (%s:%d) sended <%i> %s\n",
+			printf("[Server] (%s:%d) sended <%i> %s <%p>\n",
 				sndr?sndr->addr:get_lsocket(podr,actives[i])->addr,
 				sndr?(int)sndr->file:get_lsocket(podr,actives[i])->file,
-				pck->type,pck->message);
+				pck->type,pck->message,sndr?(void*)sndr->socket:NULL);
 			
 			/* 0 is the server address: new connections comes from here */
 			if (i==0 && pck->type==msg_sync) {
@@ -106,17 +108,20 @@ void father_process(){
 				message_send_to(clnt,msg_recv,"ack",sndr);
 				close_lsocket(sndr,0);
 			} else if (pck->type==msg_kill){
-				/* If he wants to die, well kill it */
+				/* If he wants to die, well, kill it */
+				if (sndr)printf("%p\n",(void*)sndr->addr);
+
 				del_lsocket(podr,actives[i]);
+			} else {
+				// We won't need him in that case
+				close_lsocket(sndr,0);
 			}
 			lpacket_drop(pck);
 		}
 		free(actives);
 	}
-	
-	close_lsocket(serv,1);
-	drop_lpodrum(podr,0);
-	
+
+	drop_lpodrum(podr,1);
 }
 
 void test_sockets(){

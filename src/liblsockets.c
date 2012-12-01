@@ -65,6 +65,8 @@ void open_lsocket(lsocket*sck,int type,int mode){
 	switch (type){
 		case AF_UNIX:
 			sock_un=malloc(sizeof(struct sockaddr_un));
+
+			printf(">> [%d] CREATED %p\n",getpid(),(void*)sock_un);
 			if (sock_un==NULL) ERROR("Socket malloc");
 			
 			sock_un->sun_family=type;
@@ -111,12 +113,15 @@ lsocket*make_from_socket(struct sockaddr*sock,int type,int mode){
 	
 	switch (type){
 		case AF_UNIX:
-			if(((struct sockaddr_un*)sock)->sun_path[0]==0) return NULL;
-			ret_sck=make_lsocket(((struct sockaddr_un*)sock)->sun_path);
-			/** @todo Check that part */
-			//ret_sck->socket=sock;
-			//ret_sck->mode=mode; ret_sck->type=type;
-			free(sock);
+			if(((struct sockaddr_un*)sock)->sun_path[0]==0) ret_sck=NULL;
+			else {
+				/** @todo Check that part */
+				ret_sck=make_lsocket(((struct sockaddr_un*)sock)->sun_path);
+				//ret_sck->socket=sock;
+				//ret_sck->mode=mode; ret_sck->type=type;
+				open_lsocket(ret_sck,type,mode);
+			}
+			free((struct sockaddr_un*)sock);
 			break;
 		case AF_INET:
 			WARNING("AF_INET protocol doesn't needs that function");
@@ -125,7 +130,7 @@ lsocket*make_from_socket(struct sockaddr*sock,int type,int mode){
 			OUT("Unhandled mode");
 			break;
 	}
-	open_lsocket(ret_sck,type,mode);
+	
 	return ret_sck;
 }
 
@@ -183,7 +188,10 @@ void close_lsocket(lsocket*sck,int shutd){
 	
 	close(sck->file);
 	free(sck->addr);
+	
+	printf("<< [%d] DELETED %p\n",getpid(),(void*)sck->socket);
 	free(sck->socket);
+
 	free(sck);
 }
 
@@ -226,8 +234,10 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 	unsigned int bsize=sizeof(struct sockaddr_un);
 	lsocket*recv_sck=NULL;
 	int rcv_bytes;
-	struct sockaddr*sock=(struct sockaddr*)calloc(1,sizeof(struct sockaddr_un));
+	struct sockaddr*sock=calloc(1,sizeof(struct sockaddr_un));
+	if (sock==NULL) ERROR("Malloc reply socket");
 	
+	printf(">> [%d] R-CREATED %p\n",getpid(),(void*)sock);
 	switch (sck->mode){
 		case SOCK_DGRAM:
 			
@@ -236,7 +246,7 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 				printf("Error receiving packet from %s\n",sck->addr); //! @todo make debug only
 				ERROR("Reciving packet");
 			}
-			if (sock!=NULL) recv_sck=make_from_socket((struct sockaddr*)sock,sck->type,sck->mode);
+			recv_sck=make_from_socket((struct sockaddr*)sock,sck->type,sck->mode);
 			return recv_sck;
 		case SOCK_STREAM:
 			rcv_bytes=recv(sck->file,message,bytes,0);

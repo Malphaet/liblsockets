@@ -247,12 +247,19 @@ int*listen_lpodrum(lpodrum*podr,int timer){
 	return ret;
 }
 
-
+/** Drop an lpodrum, and free all memory
+ * @param podr The podrum to free
+ * @param purge How much cleanup to perform, 0 symply free memory 1 close sockets 2, close and delete them 3 close, delete, remove.
+*/
 void drop_lpodrum(lpodrum*podr,int purge){
 	int i;
-	free(podr->fd_list);
+	
+	//purge_lpodrum(podr);
 	drop_lclist(podr->del_list);
-	if (purge) for(i=0;i<podr->cur_size;i++) close_lsocket(podr->sockets[i],0);
+	
+	if (purge) for(i=0;i<podr->cur_size;i++) close_lsocket(podr->sockets[i],purge-1);
+	
+	free(podr->fd_list);
 	free(podr->sockets);
 	free(podr);
 }

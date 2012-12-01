@@ -31,7 +31,7 @@
 
 void test_lists(){
 	lclist*liste=make_lclist();
-	lclist*curr;
+	lclist*curr; int i;
 	add_lclist(liste,24);
 	add_lclist(liste,42);
 	add_lclist(liste,'$');
@@ -41,8 +41,7 @@ void test_lists(){
 	
 	printf("Poped %d\n",pop_lclist(liste));
 	printf("Liste contains %d elts\n",len_lclist(liste));
-	
-	curr=liste; while((curr=curr->next)!=NULL) printf("%d\n",curr->data);
+	while((i=pop_lclist(liste))!=LPOP_ERROR) printf("%d\n",i);
 	drop_lclist(liste);
 }
 
