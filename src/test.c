@@ -47,8 +47,8 @@ void test_lists(){
 
 int main (){
 	//test_lists();
-	//test_sockets();
-	test_network_sockets();
+	test_sockets();
+	//test_network_sockets();
 	return 0;
 }
 

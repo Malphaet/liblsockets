@@ -25,7 +25,7 @@ void inet_chld_process(){
 	connect_lsocket(serv,NULL);
 	message_send(serv,msg_text,"MOOOOO");
 	message_receive(serv,NULL);
-	message_send(serv,msg_kill,);
+	message_send(serv,msg_kill,"");
 	close_lsocket(serv,2);
 	return;
 }
