@@ -39,10 +39,6 @@ void child_process(){
 	open_lsocket(serv,AF_UNIX,SOCK_DGRAM);
 	bind_lsocket(chld);
 	
-	/* Hardcore setup actions */
-	//srand(getpid());
-	//sleep(rand()%4);
-	
 	/* Handshake */
 	printf("[%d] Awake, sending message\n",getpid());
 	message_send_to(chld,msg_sync,"syn",serv);
@@ -55,7 +51,7 @@ void child_process(){
 	
 	/* Send results */
 	message_send_to(chld,msg_text,"Here I am",nserv);
-	message_send_to(chld,msg_text,"I",nserv);
+	message_send_to(chld,msg_text,"Hello again",nserv);
 
 	/* Quit */
 	message_send(nserv,msg_kill,"Ciao");
@@ -90,10 +86,10 @@ void father_process(){
 			/* Wait for the communication */
 			printf("[Server] Waiting %s:%d\n",get_lsocket(podr,actives[i])->addr,get_lsocket(podr,actives[i])->file);
 			pck=message_receive(get_lsocket(podr,actives[i]),&sndr);
-			printf("[Server] (%s:%d) sended <%i> %s <%p>\n",
+			printf("[Server] (%s:%d) sended <%i> %s\n",
 				sndr?sndr->addr:get_lsocket(podr,actives[i])->addr,
 				sndr?(int)sndr->file:get_lsocket(podr,actives[i])->file,
-				pck->type,pck->message,sndr?(void*)sndr->socket:NULL);
+				pck->type,pck->message);
 			
 			/* 0 is the server address: new connections comes from here */
 			if (i==0 && pck->type==msg_sync) {
@@ -111,7 +107,7 @@ void father_process(){
 				/* If he wants to die, well, kill it */
 				if (sndr)printf("%p\n",(void*)sndr->addr);
 
-				del_lsocket(podr,actives[i]);
+				del_lsocket(podr,actives[i]);	
 			} else {
 				// We won't need him in that case
 				close_lsocket(sndr,0);

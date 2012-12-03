@@ -87,7 +87,7 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 	pck=lpacket_request(message);
 	
 	if (sender_socket!=NULL) *sender_socket=rcv;
-	else //close_lsocket(rcv,0);
+	//else close_lsocket(rcv,0);
 	free(message);
 	
 	return pck;
