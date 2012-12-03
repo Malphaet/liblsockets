@@ -93,13 +93,30 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 	return pck;
 }
 
-/** Listen to new incomming transmitions on socket
- * @param sock The socket listen to
- * @return The socket who connected to the server
+
+/** Accept incomming connection
+ * @param sock The socket to put in accept mode
+ * @param size_pending Size of the pending acceptation socket list
  * On SOCK_DGRAM it's a lame receiving server
  * On SOCK_STREAM it behave as the standard listening function
  */
-lsocket* listen_lsocket(lsocket*sock){
+void listen_lsocket(lsocket*sock,int size_pending){
+	switch(sock->mode){
+		case (SOCK_DGRAM):
+			break;
+		case (SOCK_STREAM):
+			listen(sock->file,size_pending);
+			break;
+		default:
+			OUT("Unhandled mode");
+			break;
+	}
+}
+/** Listen to new incomming transmitions on socket
+ * @param sock The socket listen to
+ * @return The socket who connected to the server
+ */
+lsocket* accept_lsocket(lsocket*sock){
 	lsocket*new=NULL; lpacket*pck;
 	unsigned int size; char*name;
 	struct sockaddr_in*new_addr=NULL;
@@ -118,7 +135,6 @@ lsocket* listen_lsocket(lsocket*sock){
 			if (new==NULL) ERROR("Returned socket malloc");
 			if (new_addr==NULL) ERROR("Listening socket malloc");
 			
-			listen(sock->file,SIZE_PENDING);
 			if ((new->file=accept(sock->file,(struct sockaddr*)new_addr,&size))<0) ERROR("Accept error");
 			if (new_addr==NULL) OUT("Error receiving socket");
 			sprintf(name,"%s:%d",inet_ntoa(new_addr->sin_addr),ntohs(new_addr->sin_port));

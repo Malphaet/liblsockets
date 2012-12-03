@@ -143,7 +143,9 @@ int 	 message_send			(lsocket*,msg_type,char*);/**< [Public]: Send a message thr
 int 	 message_send_to		(lsocket*,msg_type,char*,lsocket*);	/**< [Public]: Send a message through the socket */
 lpacket* message_receive		(lsocket*,lsocket**);	/**< [Public]: Return the received socket, save the sending socket */
 
-lsocket* listen_lsocket	(lsocket*);						/**< [Public]: Listen to new incomming transmitions */
+void	 listen_lsocket	(lsocket*,int);					/**< [Public]: Listen to new incomming transmitions */
+lsocket* accept_lsocket	(lsocket*);						/**< [Public]: Accept a new socket */
+
 lpodrum* make_lpodrum			(int);					/**< [Public]: Create new listening basement (podrum in croatian) */
 void	 add_lsocket			(lpodrum*,lsocket*,int);/**< [Public]: Add a num socket to the basement */
 lsocket* get_lsocket			(lpodrum*,int);			/**< [Public]: Get the socket number */
