@@ -73,8 +73,14 @@ void lpacket_drop(lpacket*pck){
 lpacket*lpacket_request(char*message){
 	int type;
 	char*pck_message;
-	type=atoi(strtok(message," "));
-	pck_message=strtok(NULL,"\0");
+	
+	//if (strlen(message)){
+		type=atoi(strtok(message," "));
+		pck_message=strtok(NULL,"\0");
+	//} else {
+		 //type=msg_wtf;
+		 //pck_message="";
+	//}
 	return lpacket_forge(type,pck_message);
 }
 

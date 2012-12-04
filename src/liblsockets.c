@@ -253,6 +253,10 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 			if (rcv_bytes<0) {
 				printf("Error receiving packet from %s\n",sck->addr);
 				ERROR("Reciving packet");
+			} 
+			if (rcv_bytes==0) {
+				WARNING("No data received");
+				sprintf(message,"%d %c",msg_wtf,42);
 			}
 			return sck->sendto;
 		default:

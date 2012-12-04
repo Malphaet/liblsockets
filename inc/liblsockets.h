@@ -152,6 +152,7 @@ lpodrum* make_lpodrum			(int);					/**< [Public]: Create new listening basement 
 void	 add_lsocket			(lpodrum*,lsocket*,int);/**< [Public]: Add a num socket to the basement */
 lsocket* get_lsocket			(lpodrum*,int);			/**< [Public]: Get the socket number */
 int		 del_lsocket			(lpodrum*,int);			/**< [Public]: Delete the socket (int) from the basement */
+int		 get_event				(lpodrum*,int);			/**< [Public]: Get the event number */
 int* 	 listen_lpodrum			(lpodrum*,int timeout);	/**< [Public]: Return the list from all the socket ready to communicate */
 void	 purge_lpodrum			(lpodrum*);				/**< [Prvate]: Purge the lpodrum before usage */
 void	 drop_lpodrum			(lpodrum*,int);			/**< [Public]: Delete the lpodrum and free the memory */

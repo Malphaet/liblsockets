@@ -141,7 +141,7 @@ lsocket* accept_lsocket(lsocket*sock){
 						
 			new->type=sock->type; new->mode=sock->mode;
 			new->addr=name; new->sendto=new;
-			new->socket=new_addr;
+			new->socket=(struct sockaddr*)new_addr;
 			break;
 		default:
 			OUT("Unhandled Mode");
@@ -202,6 +202,16 @@ void add_lsocket(lpodrum*podr,lsocket*sock,int type){
 lsocket* get_lsocket(lpodrum*podr,int nb){
 	if (podr->cur_size-1<nb) OUT("Index out of range");
 	return podr->sockets[nb];
+}
+
+/** Get the event mask out of the listening basement 
+ * @param podr The listening basement to consider
+ * @param nb The index of event to get
+ * @return The retreived events
+ */
+int get_event(lpodrum*podr,int nb){
+	if (podr->cur_size-1<nb) OUT("Index out of range");
+	return podr->fd_list[nb].revents;
 }
 
 /** Delete the socket from the basement
