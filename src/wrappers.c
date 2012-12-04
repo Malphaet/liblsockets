@@ -87,7 +87,7 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 	pck=lpacket_request(message);
 	
 	if (sender_socket!=NULL) *sender_socket=rcv;
-	//else close_lsocket(rcv,0);
+	//else free_lsocket(rcv);
 	free(message);
 	
 	return pck;
@@ -128,8 +128,8 @@ lsocket* accept_lsocket(lsocket*sock){
 			} while (pck->type!=msg_sync);
 			break;
 		case (SOCK_STREAM):
-			new=malloc(sizeof(struct sockaddr_in));
-			new_addr=malloc(sizeof(struct sockaddr));
+			new=malloc(sizeof(lsocket));
+			new_addr=malloc(sizeof(struct sockaddr_in));
 			name=malloc(sizeof(char)*SIZE_ADDR);
 			size=sizeof(struct sockaddr_in);
 			if (new==NULL) ERROR("Returned socket malloc");

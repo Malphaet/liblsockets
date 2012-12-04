@@ -185,12 +185,18 @@ void close_lsocket(lsocket*sck,int shutd){
 	}
 	
 	close(sck->file);
-	free(sck->addr);
-	free(sck->socket);
-
-	free(sck);
+	free_lsocket(sck);
 }
 
+/** Free fields of a lsocket
+ * @param sck The socket to free
+ */
+void free_lsocket(lsocket*sck){
+	free(sck->addr);
+	free(sck->socket);
+	
+	free(sck);
+}
 /** Send string to the server 
  * @param sck if connect_lsocket() wasn't used it's considered to be the receiver
  * If it was, it's considered to be the sender's socket and lsocket->sendto is considered to be the destination.
@@ -230,12 +236,11 @@ lsocket* lsocket_receive(lsocket*sck, char*message,int bytes){
 	unsigned int bsize=sizeof(struct sockaddr_un);
 	lsocket*recv_sck=NULL;
 	int rcv_bytes;
-	struct sockaddr*sock=calloc(1,sizeof(struct sockaddr_un));
-	if (sock==NULL) ERROR("Malloc reply socket");
+	struct sockaddr*sock;
 	
 	switch (sck->mode){
 		case SOCK_DGRAM:
-			
+			if ((sock=calloc(1,sizeof(struct sockaddr_un)))==NULL) ERROR("Malloc reply socket");
 			rcv_bytes=recvfrom(sck->file,message,bytes,0,sock,&bsize);
 			if (rcv_bytes<0) {
 				printf("Error receiving packet from %s\n",sck->addr); //! @todo make debug only

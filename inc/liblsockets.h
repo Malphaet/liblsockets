@@ -131,6 +131,8 @@ void 	 open_lsocket	(lsocket*,int,int);					/**< [Public]: Open the socket for c
 void 	 connect_lsocket(lsocket*,lsocket*);					/**< [Public]: Connect the socket to another */
 void	 bind_lsocket	(lsocket*);								/**< [Public]: Bind the socket for answers */
 void 	 close_lsocket	(lsocket*,int);							/**< [Public]: Terminate the connection */
+void	 free_lsocket(lsocket*);								/**< [Public]: Free unused memory */
+
 int 	 lsocket_send	(lsocket*,char*,int);					/**< [Privte] */
 lsocket* lsocket_receive(lsocket*,char*,int);					/**< [Privte] */
 
