@@ -54,6 +54,7 @@ The following function allow you to handle the task of waiting for incomming/out
 + @ref todo
 + Do the test on all other combination TCP unix, UDP inet.
 + Verbosity is not such a great idea
++ Update the listen command on the tests
 
 ### Cosmetic
 + make functions thread safe

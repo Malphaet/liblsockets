@@ -97,8 +97,6 @@ lpacket*message_receive(lsocket*recver_socket,lsocket**sender_socket){
 /** Accept incomming connection
  * @param sock The socket to put in accept mode
  * @param size_pending Size of the pending acceptation socket list
- * On SOCK_DGRAM it's a lame receiving server
- * On SOCK_STREAM it behave as the standard listening function
  */
 void listen_lsocket(lsocket*sock,int size_pending){
 	switch(sock->mode){
@@ -115,6 +113,8 @@ void listen_lsocket(lsocket*sock,int size_pending){
 /** Listen to new incomming transmitions on socket
  * @param sock The socket listen to
  * @return The socket who connected to the server
+ * On SOCK_DGRAM it's a lame receiving server
+ * On SOCK_STREAM it behave as the standard listening function
  */
 lsocket* accept_lsocket(lsocket*sock){
 	lsocket*new=NULL; lpacket*pck;

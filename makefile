@@ -2,6 +2,7 @@ AR = ar rcs
 CC = gcc
 EDITOR = geany
 QUIET = @
+PRINT = echo
 
 BIN = bin
 OBJ = obj
