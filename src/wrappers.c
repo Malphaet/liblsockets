@@ -141,6 +141,7 @@ lsocket* accept_lsocket(lsocket*sock){
 						
 			new->type=sock->type; new->mode=sock->mode;
 			new->addr=name; new->sendto=new;
+			new->socket=new_addr;
 			break;
 		default:
 			OUT("Unhandled Mode");
@@ -225,17 +226,17 @@ void purge_lpodrum(lpodrum*podr){
 	int todel,torep;
 	while ((todel=pop_lclist(podr->del_list))!=LPOP_ERROR){
 		torep=--podr->cur_size;
-		if (todel==torep) torep--;
+		if (todel==torep) torep++;
 
 		if (verbose) printf("Killing %s\n",podr->sockets[todel]->addr);
 		close_lsocket(podr->sockets[todel],1);
 
-		if (torep<0){
-			podr->sockets[todel]=NULL;
-		} else {
+		//if (torep<0){
+			//podr->sockets[todel]=NULL;
+		//} else {
 			podr->fd_list[todel]=podr->fd_list[torep];
 			podr->sockets[todel]=podr->sockets[torep];
-		}
+		//}
 	}
 }
 
