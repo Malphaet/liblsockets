@@ -55,6 +55,8 @@ The following function allow you to handle the task of waiting for incomming/out
 + Do the test on all other combination TCP unix, UDP inet.
 + Verbosity is not such a great idea
 + Update the listen command on the tests
++ Integrate the nanosleep to sending command
++ Correct podrum and receiving, avoid verbose warning in case of some errors, do it cleverly
 
 ### Cosmetic
 + make functions thread safe

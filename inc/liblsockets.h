@@ -79,6 +79,8 @@ typedef enum msg_enum{
 	msg_recv,	/**< [nfo]:[program] Message received */
 	msg_keep,	/**< [nfo]:[core] [TBI] Keep-alive */
 	msg_kill,	/**< [nfo]:[program] The connection is to be shutdown, process now */
+	msg_name,	/**< [msg]:[program] Username sent */
+	msg_pass,	/**< [msg]:[program] Password sent */
 	msg_text,	/**< [msg]:[program] String sent */
 	msg_cont,	/**< [msg]:[program] Message is not finished ! */
 	msg_fnsh,	/**< [msg]:[program] Message is finished */
