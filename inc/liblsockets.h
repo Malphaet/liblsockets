@@ -86,6 +86,7 @@ typedef enum msg_enum{
 	msg_fnsh,	/**< [msg]:[program] Message is finished */
 	msg_warnings, 	/**< Not a message: Upper this value are warnings */
 	msg_wait,	/**< [wrn]:[core] [NYI] Server overloaded, wait */
+	msg_zero,	/**< [wrn]:[program] Zero bytes received from server */
 	msg_errors, 	/**< Not a message: Upper this value are errors */
 	msg_err,	/**< [err]:[core] [NYI] (Unknown) Error in received socket */
 	msg_die,	/**< [err]:[core] [NYI] Server died, will not process requests anymore */
