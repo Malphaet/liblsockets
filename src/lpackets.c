@@ -49,10 +49,10 @@
  */
 lpacket*lpacket_forge(msg_type type,char *message){
 	lpacket*pck=malloc(sizeof(lpacket));
-	char*pck_message=malloc(sizeof(char)*(strlen(message)+1));
+	char*pck_message=malloc(sizeof(char)*(strlen(message)+2));
 	if (pck==NULL) ERROR("Malloc lpacket");
 	if (pck==NULL) ERROR("Malloc message");
-	if (!strcmp(message,"")) pck_message[0]=42;
+	if (!strcmp(message,"")) {pck_message[0]=42;pck_message[1]='\0';}
 	else strcpy(pck_message,message);
 	pck->type=type;
 	pck->message=pck_message;
@@ -89,7 +89,8 @@ lpacket*lpacket_request(char*message){
  * @return A message made from the packet
  */
 char *lpacket_message(lpacket*pck){
-	int size=strlen(pck->message)+5;
+	char*mess=pck->message;
+	int size=strlen(mess)+5;
 	char*message=malloc(sizeof(char)*size);
 	if (message==NULL) ERROR("lPacket malloc");
 	sprintf(message,"%d %s",pck->type,pck->message); //! @todo Improve splitting mechanism
